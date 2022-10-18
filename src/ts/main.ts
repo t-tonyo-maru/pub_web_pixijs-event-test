@@ -5,7 +5,7 @@ import { getIsTouchableDevice } from '@/modules/getIsTouchableDevice/getIsToucha
 const staticPath =
   process.env.NODE_ENV === 'production' ? '/assets/images' : '/assets/images'
 // タッチ可能か
-const isTauchable = getIsTouchableDevice()
+const isTauchable = getIsTouchableDevice(window)
 // 拡大縮小の最大値
 const scalesRange = {
   min: 1,
