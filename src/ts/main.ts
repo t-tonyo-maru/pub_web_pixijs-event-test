@@ -8,7 +8,7 @@ const staticPath =
 const isTauchable = getIsTouchableDevice()
 // 拡大縮小の最大値
 const scalesRange = {
-  min: -10,
+  min: 1,
   max: 10
 }
 
@@ -81,7 +81,9 @@ window.onload = () => {
   // コンテナをstageに追加
   app.stage.addChild(container)
 
-  // イベントセット
+  /**
+   * イベントセット
+   */
   // ホイールイベント
   app.view.addEventListener('wheel', (event) => {
     event.preventDefault()
@@ -98,5 +100,30 @@ window.onload = () => {
     console.log(event)
     console.log('wheelSize: ', wheelSize)
     console.log(container.scale)
+  })
+
+  let isDragging = false
+  // ドラッグイベント
+  app.view.addEventListener('mousedown', (event) => {
+    event.preventDefault()
+    // タッチデバイスの場合は処理を止める
+    if (isTauchable) return
+    isDragging = true
+    // console.log(event.clientX, event.clientY)
+    // container.position.set(event.clientX, event.clientY)
+  })
+  app.view.addEventListener('mousemove', (event) => {
+    event.preventDefault()
+    // タッチデバイスの場合は処理を止める
+    if (isTauchable) return
+    if (!isDragging) return
+    container.position.set(event.clientX, event.clientY)
+  })
+  app.view.addEventListener('mouseup', (event) => {
+    event.preventDefault()
+    // タッチデバイスの場合は処理を止める
+    if (isTauchable) return
+    isDragging = false
+    // console.log(event.clientX, event.clientY)
   })
 }
