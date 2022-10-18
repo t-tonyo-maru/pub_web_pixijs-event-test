@@ -104,30 +104,39 @@ window.onload = () => {
   })
 
   let isDragging = false
+  const dragPosition = {
+    x: 0,
+    y: 0
+  }
   // ドラッグイベント
   app.view.addEventListener('mousedown', (event) => {
     event.preventDefault()
     // タッチデバイスの場合は処理を止める
     if (isTauchable) return
     isDragging = true
-    // console.log(event.clientX, event.clientY)
-    // container.position.set(event.clientX, event.clientY)
+    dragPosition.x = event.clientX
+    dragPosition.y = event.clientY
   })
   app.view.addEventListener('mousemove', (event) => {
     event.preventDefault()
     // タッチデバイスの場合は処理を止める
     if (isTauchable) return
     if (!isDragging) return
-    container.position.set(
-      event.clientX - container.width / 2,
-      event.clientY - (Math.abs(container.height) / 2) * -1
-    )
+
+    const diff = {
+      x: event.clientX - dragPosition.x,
+      y: event.clientY - dragPosition.y
+    }
+
+    container.position.set(container.x + diff.x, container.y + diff.y)
+
+    dragPosition.x = event.clientX
+    dragPosition.y = event.clientY
   })
   app.view.addEventListener('mouseup', (event) => {
     event.preventDefault()
     // タッチデバイスの場合は処理を止める
     if (isTauchable) return
     isDragging = false
-    // console.log(event.clientX, event.clientY)
   })
 }
