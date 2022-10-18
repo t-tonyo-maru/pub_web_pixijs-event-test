@@ -120,7 +120,9 @@ window.onload = () => {
     event.preventDefault()
     // タッチデバイスの場合は処理を止める
     if (isTauchable) return
+    // ドラッグ中フラグON
     isDraggingOnPc = true
+    // ドラッグ開始時の位置を保持
     dragPositionOnPc.x = event.clientX
     dragPositionOnPc.y = event.clientY
   })
@@ -128,6 +130,7 @@ window.onload = () => {
     event.preventDefault()
     // タッチデバイスの場合は処理を止める
     if (isTauchable) return
+    // ドラッグ中フラグONの場合のみ実行する
     if (!isDraggingOnPc) return
     // ドラッグ距離の差分を計算
     const diff = {
@@ -136,7 +139,7 @@ window.onload = () => {
     }
     // コンテナを差分だけ移動させる
     container.position.set(container.x + diff.x, container.y + diff.y)
-    // mousemoveイベントから移動距離を更新
+    // mousemoveイベントからドラッグの位置を更新
     dragPositionOnPc.x = event.clientX
     dragPositionOnPc.y = event.clientY
   })
@@ -144,10 +147,56 @@ window.onload = () => {
     event.preventDefault()
     // タッチデバイスの場合は処理を止める
     if (isTauchable) return
+    // ドラッグ中フラグOFF
     isDraggingOnPc = false
   })
   /**
    * SP: ドラッグイベント
    * ※本当は isTauchable でイベントを設置するか否かを分けた方が良い。
+   *
+   * 未確認
    */
+  let isDraggingOnTouchDevice = false
+  const dragPositionOnTouchDevice = {
+    x: 0,
+    y: 0
+  }
+  app.view.addEventListener('touchstart', (event) => {
+    event.preventDefault()
+    // タッチ可能デバイスのみ処理を実行する
+    if (!isTauchable) return
+    // タッチしている指が1本の場合のみドラッグ扱いとする
+    if (event.touches.length !== 1) return
+    // ドラッグ中フラグON
+    isDraggingOnTouchDevice = true
+    // ドラッグ開始時の位置を保持
+    dragPositionOnTouchDevice.x = event.touches[0].clientX
+    dragPositionOnTouchDevice.y = event.touches[0].clientY
+  })
+  app.view.addEventListener('touchmove', (event) => {
+    event.preventDefault()
+    // タッチ可能デバイスのみ処理を実行する
+    if (!isTauchable) return
+    // タッチしている指が1本の場合のみドラッグ扱いとする
+    if (event.touches.length !== 1) return
+    // ドラッグ中フラグONの場合のみ実行する
+    if (!isDraggingOnTouchDevice) return
+    // ドラッグ距離の差分を計算
+    const diff = {
+      x: event.touches[0].clientX - dragPositionOnTouchDevice.x,
+      y: event.touches[0].clientY - dragPositionOnTouchDevice.y
+    }
+    // コンテナを差分だけ移動させる
+    container.position.set(container.x + diff.x, container.y + diff.y)
+    // mousemoveイベントからドラッグの位置を更新
+    dragPositionOnTouchDevice.x = event.touches[0].clientX
+    dragPositionOnTouchDevice.y = event.touches[0].clientY
+  })
+  app.view.addEventListener('mouseup', (event) => {
+    event.preventDefault()
+    // タッチ可能デバイスのみ処理を実行する
+    if (!isTauchable) return
+    // ドラッグ中フラグOFF
+    isDraggingOnTouchDevice = false
+  })
 }
