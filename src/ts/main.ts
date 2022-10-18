@@ -94,17 +94,15 @@ window.onload = () => {
     event.preventDefault()
     // ホイール量
     const wheelSize = (event.deltaY / 1000) * -1
-    const scaleX = container.scale.x + wheelSize
-    const scaleY = container.scale.y + wheelSize
-    // スケールサイズの計算
-    container.scale.set(
-      Math.min(Math.max(scalesRange.max, scaleX), scalesRange.min),
-      Math.min(Math.max(scalesRange.max, scaleY), scalesRange.min)
+    // x軸のサイズを元にしたスケール
+    const scaleSize = container.scale.x + wheelSize
+    // スケールサイズ
+    const scale = Math.min(
+      Math.max(scalesRange.min, scaleSize),
+      scalesRange.max
     )
-
-    console.log(event)
-    console.log('wheelSize: ', wheelSize)
-    console.log(container.scale)
+    // スケールサイズを適用
+    container.scale.set(scale, scale * -1)
   })
 
   /**
