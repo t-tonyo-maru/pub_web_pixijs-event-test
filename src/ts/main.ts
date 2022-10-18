@@ -32,6 +32,7 @@ window.onload = () => {
 
   // コンテナを用意
   const container = new PIXI.Container()
+  container.pivot.set(0.5)
   // container.pivot.x = 0.5
   // container.pivot.y = 0.5
   // コンテナをy軸反転
@@ -117,7 +118,10 @@ window.onload = () => {
     // タッチデバイスの場合は処理を止める
     if (isTauchable) return
     if (!isDragging) return
-    container.position.set(event.clientX, event.clientY)
+    container.position.set(
+      event.clientX - container.width / 2,
+      event.clientY - (Math.abs(container.height) / 2) * -1
+    )
   })
   app.view.addEventListener('mouseup', (event) => {
     event.preventDefault()
