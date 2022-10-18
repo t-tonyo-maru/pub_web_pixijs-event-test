@@ -107,45 +107,47 @@ window.onload = () => {
     console.log(container.scale)
   })
 
-  let isDragging = false
-  const dragPosition = {
+  let isDraggingOnPc = false
+  const dragPositionOnPc = {
     x: 0,
     y: 0
   }
   /**
    * PC: ドラッグイベント
+   * ※本当は isTauchable でイベントを設置するか否かを分けた方が良い。
    */
   app.view.addEventListener('mousedown', (event) => {
     event.preventDefault()
     // タッチデバイスの場合は処理を止める
     if (isTauchable) return
-    isDragging = true
-    dragPosition.x = event.clientX
-    dragPosition.y = event.clientY
+    isDraggingOnPc = true
+    dragPositionOnPc.x = event.clientX
+    dragPositionOnPc.y = event.clientY
   })
   app.view.addEventListener('mousemove', (event) => {
     event.preventDefault()
     // タッチデバイスの場合は処理を止める
     if (isTauchable) return
-    if (!isDragging) return
-
+    if (!isDraggingOnPc) return
+    // ドラッグ距離の差分を計算
     const diff = {
-      x: event.clientX - dragPosition.x,
-      y: event.clientY - dragPosition.y
+      x: event.clientX - dragPositionOnPc.x,
+      y: event.clientY - dragPositionOnPc.y
     }
-
+    // コンテナを差分だけ移動させる
     container.position.set(container.x + diff.x, container.y + diff.y)
-
-    dragPosition.x = event.clientX
-    dragPosition.y = event.clientY
+    // mousemoveイベントから移動距離を更新
+    dragPositionOnPc.x = event.clientX
+    dragPositionOnPc.y = event.clientY
   })
   app.view.addEventListener('mouseup', (event) => {
     event.preventDefault()
     // タッチデバイスの場合は処理を止める
     if (isTauchable) return
-    isDragging = false
+    isDraggingOnPc = false
   })
   /**
    * SP: ドラッグイベント
+   * ※本当は isTauchable でイベントを設置するか否かを分けた方が良い。
    */
 }
