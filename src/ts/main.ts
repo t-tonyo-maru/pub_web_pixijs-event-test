@@ -1,12 +1,16 @@
 import * as PIXI from 'pixi.js'
+import { getIsTouchableDevice } from '@/modules/getIsTouchableDevice/getIsTouchableDevice'
 
 // 画像格納先
 const staticPath =
   process.env.NODE_ENV === 'production' ? '/assets/images' : '/assets/images'
+const isTauchable = getIsTouchableDevice()
 // consoleのバナーを非表示にする
 PIXI.utils.skipHello()
 
 window.onload = () => {
+  console.log('タッチ可能か: ', isTauchable)
+
   const wrapper = document.getElementById('js-canvas_wrapper') as HTMLElement
 
   // 画面解像度の比率
