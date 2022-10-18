@@ -4,7 +4,14 @@ import { getIsTouchableDevice } from '@/modules/getIsTouchableDevice/getIsToucha
 // 画像格納先
 const staticPath =
   process.env.NODE_ENV === 'production' ? '/assets/images' : '/assets/images'
+// タッチ可能か
 const isTauchable = getIsTouchableDevice()
+// 拡大縮小の最大値
+const scalesRange = {
+  min: -10,
+  max: 10
+}
+
 // consoleのバナーを非表示にする
 PIXI.utils.skipHello()
 
@@ -25,6 +32,8 @@ window.onload = () => {
 
   // コンテナを用意
   const container = new PIXI.Container()
+  // container.pivot.x = 0.5
+  // container.pivot.y = 0.5
   // コンテナをy軸反転
   container.position.y = app.renderer.height / app.renderer.resolution
   container.scale.y = -1
@@ -46,14 +55,10 @@ window.onload = () => {
   observer.observe(wrapper)
 
   // image sample
-  // src/static/images/bunny.png
-
   const bunnyTexture = PIXI.Texture.from(`${staticPath}/bunny.png`)
   bunnyTexture.rotate = 8
   const bunnySprite = new PIXI.Sprite(bunnyTexture)
   bunnySprite.anchor.set(0.5)
-  // bunnySprite.angle = 180
-  // bunnySprite.angle = 180
   bunnySprite.x = 400
   bunnySprite.y = 400
   container.addChild(bunnySprite)
@@ -75,4 +80,23 @@ window.onload = () => {
   wrapper.appendChild(app.view)
   // コンテナをstageに追加
   app.stage.addChild(container)
+
+  // イベントセット
+  // ホイールイベント
+  app.view.addEventListener('wheel', (event) => {
+    event.preventDefault()
+    // ホイール量
+    const wheelSize = (event.deltaY / 1000) * -1
+    const scaleX = container.scale.x + wheelSize
+    const scaleY = container.scale.y + wheelSize
+    // スケールサイズの計算
+    container.scale.set(
+      Math.min(Math.max(scalesRange.max, scaleX), scalesRange.min),
+      Math.min(Math.max(scalesRange.max, scaleY), scalesRange.min)
+    )
+
+    console.log(event)
+    console.log('wheelSize: ', wheelSize)
+    console.log(container.scale)
+  })
 }
