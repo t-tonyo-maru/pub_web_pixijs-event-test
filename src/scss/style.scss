@@ -64,3 +64,9 @@
 @use './helper/clearfix' as *;
 @use './helper/margin' as *;
 @use './helper/padding' as *;
+
+#js-canvas_wrapper {
+  background-color: #000;
+  height: 100vh;
+  width: 100vw;
+}
