@@ -107,15 +107,15 @@ window.onload = () => {
     console.log(container.scale)
   })
 
+  /**
+   * PC: ドラッグイベント
+   * ※本当は isTauchable でイベントを設置するか否かを分けた方が良い。
+   */
   let isDraggingOnPc = false
   const dragPositionOnPc = {
     x: 0,
     y: 0
   }
-  /**
-   * PC: ドラッグイベント
-   * ※本当は isTauchable でイベントを設置するか否かを分けた方が良い。
-   */
   app.view.addEventListener('mousedown', (event) => {
     event.preventDefault()
     // タッチデバイスの場合は処理を止める
@@ -150,11 +150,12 @@ window.onload = () => {
     // ドラッグ中フラグOFF
     isDraggingOnPc = false
   })
+
   /**
    * SP: ドラッグイベント
    * ※本当は isTauchable でイベントを設置するか否かを分けた方が良い。
    *
-   * 未確認
+   * 未テスト
    */
   let isDraggingOnTouchDevice = false
   const dragPositionOnTouchDevice = {
