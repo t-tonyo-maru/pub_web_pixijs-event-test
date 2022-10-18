@@ -95,7 +95,7 @@ window.onload = () => {
   app.view.addEventListener('wheel', (event) => {
     event.preventDefault()
     // ホイール量
-    const wheelSize = (event.deltaY / 400) * -1
+    const wheelSize = (event.deltaY / 1000) * -1
     // x軸のサイズを元にしたスケール
     const scaleSize = container.scale.x + wheelSize
     // スケールサイズ
@@ -107,7 +107,10 @@ window.onload = () => {
     container.scale.set(scale, scale * -1)
     // 拡大縮小率を更新
     scaleRato = scale
-    // container.position.set
+
+    container.position.set(container.position.x, container.position.y)
+    console.log(event.clientX, event.clientY)
+    console.log(container.position)
   })
 
   /**
