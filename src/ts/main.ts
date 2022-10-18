@@ -82,10 +82,14 @@ window.onload = () => {
   // コンテナをstageに追加
   app.stage.addChild(container)
 
-  /**
+  /****************************************
+   *
    * イベントセット
+   *
+   ****************************************/
+  /**
+   * PC: ホイールイベント
    */
-  // ホイールイベント
   app.view.addEventListener('wheel', (event) => {
     event.preventDefault()
     // ホイール量
@@ -108,7 +112,9 @@ window.onload = () => {
     x: 0,
     y: 0
   }
-  // ドラッグイベント
+  /**
+   * PC: ドラッグイベント
+   */
   app.view.addEventListener('mousedown', (event) => {
     event.preventDefault()
     // タッチデバイスの場合は処理を止める
@@ -139,4 +145,7 @@ window.onload = () => {
     if (isTauchable) return
     isDragging = false
   })
+  /**
+   * SP: ドラッグイベント
+   */
 }
