@@ -6,10 +6,12 @@ const staticPath =
   process.env.NODE_ENV === 'production' ? '/assets/images' : '/assets/images'
 // タッチ可能か
 const isTauchable = getIsTouchableDevice(window)
+// 拡大縮小率
+let scaleRato = 1
 // 拡大縮小の最大値
 const scalesRange = {
   min: 1,
-  max: 10
+  max: 20
 }
 
 // consoleのバナーを非表示にする
@@ -94,28 +96,32 @@ window.onload = () => {
     event.preventDefault()
     // ホイール量
     const wheelSize = (event.deltaY / 1000) * -1
-    const scaleX = container.scale.x + wheelSize
-    const scaleY = container.scale.y + wheelSize
-    // スケールサイズの計算
-    container.scale.set(
-      Math.min(Math.max(scalesRange.max, scaleX), scalesRange.min),
-      Math.min(Math.max(scalesRange.max, scaleY), scalesRange.min)
+    // x軸のサイズを元にしたスケール
+    const scaleSize = container.scale.x + wheelSize
+    // スケールサイズ
+    const scale = Math.min(
+      Math.max(scalesRange.min, scaleSize),
+      scalesRange.max
     )
+    // スケールサイズを適用
+    container.scale.set(scale, scale * -1)
+    // 拡大縮小率を更新
+    scaleRato = scale
 
-    console.log(event)
-    console.log('wheelSize: ', wheelSize)
-    console.log(container.scale)
+    container.position.set(container.position.x, container.position.y)
+    console.log(event.clientX, event.clientY)
+    console.log(container.position)
   })
 
+  /**
+   * PC: ドラッグイベント
+   * ※本当は isTauchable でイベントを設置するか否かを分けた方が良い。
+   */
   let isDraggingOnPc = false
   const dragPositionOnPc = {
     x: 0,
     y: 0
   }
-  /**
-   * PC: ドラッグイベント
-   * ※本当は isTauchable でイベントを設置するか否かを分けた方が良い。
-   */
   app.view.addEventListener('mousedown', (event) => {
     event.preventDefault()
     // タッチデバイスの場合は処理を止める
@@ -150,11 +156,12 @@ window.onload = () => {
     // ドラッグ中フラグOFF
     isDraggingOnPc = false
   })
+
   /**
    * SP: ドラッグイベント
    * ※本当は isTauchable でイベントを設置するか否かを分けた方が良い。
    *
-   * 未確認
+   * 未テスト
    */
   let isDraggingOnTouchDevice = false
   const dragPositionOnTouchDevice = {
