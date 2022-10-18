@@ -6,10 +6,12 @@ const staticPath =
   process.env.NODE_ENV === 'production' ? '/assets/images' : '/assets/images'
 // タッチ可能か
 const isTauchable = getIsTouchableDevice(window)
+// 拡大縮小率
+let scaleRato = 1
 // 拡大縮小の最大値
 const scalesRange = {
   min: 1,
-  max: 10
+  max: 20
 }
 
 // consoleのバナーを非表示にする
@@ -93,7 +95,7 @@ window.onload = () => {
   app.view.addEventListener('wheel', (event) => {
     event.preventDefault()
     // ホイール量
-    const wheelSize = (event.deltaY / 1000) * -1
+    const wheelSize = (event.deltaY / 400) * -1
     // x軸のサイズを元にしたスケール
     const scaleSize = container.scale.x + wheelSize
     // スケールサイズ
@@ -103,6 +105,9 @@ window.onload = () => {
     )
     // スケールサイズを適用
     container.scale.set(scale, scale * -1)
+    // 拡大縮小率を更新
+    scaleRato = scale
+    // container.position.set
   })
 
   /**
